@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>eYFi -Mega Code - FFT Authentication</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">FFT Authentication</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../Software/" class="nav-link">Python Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../hardware/" class="nav-link">eYFi-Mega Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../references/" class="nav-link">References</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#eyfi-mega-code" class="nav-link">eYFi -Mega Code</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#code-for-fft-authentication-near-ultrasonic" class="nav-link">Code for FFT authentication ( Near Ultrasonic)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link"></a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_2" class="nav-link"></a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="eyfi-mega-code">eYFi -Mega Code</h1>
+<hr />
+<p>We developed our code using Arduino IDE for eyantra . We have made use of lot of libraries for display,wifi client ,Http requests and certificates. Relevant comments are added in this code and this code was completely tested Go through the following code.</p>
+<h2 id="code-for-fft-authentication-near-ultrasonic">Code for FFT authentication ( Near Ultrasonic)</h2>
+<pre><code class="c">#include &lt;Wire.h&gt;
+#include &lt;WiFi.h&gt;
+#include &lt;HTTPClient.h&gt;
+#include &quot;arduinoFFT.h&quot; 
+#include &quot;SSD1306.h&quot;          
+#define SAMPLES 512                 // Bin size for computing FFT     
+#define SAMPLING_FREQUENCY 40000   //Our sampling frequency 
+#define amplitude 100  
+
+
+SSD1306 display(0x3c,SDA,SCL);    // This is to intiate the Display module attached
+arduinoFFT FFT = arduinoFFT();    //Create an object of FFT class for Computation
+unsigned int sampling_period_us;  
+unsigned long microseconds;
+double vReal[SAMPLES];            //Real values of the plotted FFT
+double vImag[SAMPLES];            //Imaginary values of plotted FFT
+unsigned long newTime, oldTime;   //For ADC converison and sampling purpose using this 
+
+int aravinda=0;                   //Flag  to authenticate only once ( 1 or 0)
+int sourav=0;
+const char * ssid = &quot;Ishavasyam WiFi&quot;;      //Network credentials
+const char * password = &quot;ishavasyamidamsarvam216&quot;;  //Network credentials
+String GOOGLE_SCRIPT_ID = &quot;AKfycbxR_zSZXTKHCSI4V2tCeCNpGgHTgp3dCH6AQcnQic7WmYv52Ak&quot;;    // Id of the goole docs sheet which we are using to store
+const int sendInterval = 996 *5; // in millis, 996 instead of 1000 is adjustment, with 1000 it jumps ahead a minute every 3-4 hours
+const char * root_ca=\
+&quot;-----BEGIN CERTIFICATE-----\n&quot; \
+&quot;MIIDujCCAqKgAwIBAgILBAAAAAABD4Ym5g0wDQYJKoZIhvcNAQEFBQAwTDEgMB4G\n&quot; \
+&quot;A1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjIxEzARBgNVBAoTCkdsb2JhbFNp\n&quot; \
+&quot;Z24xEzARBgNVBAMTCkdsb2JhbFNpZ24wHhcNMDYxMjE1MDgwMDAwWhcNMjExMjE1\n&quot; \
+&quot;MDgwMDAwWjBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMjETMBEG\n&quot; \
+&quot;A1UEChMKR2xvYmFsU2lnbjETMBEGA1UEAxMKR2xvYmFsU2lnbjCCASIwDQYJKoZI\n&quot; \
+&quot;hvcNAQEBBQADggEPADCCAQoCggEBAKbPJA6+Lm8omUVCxKs+IVSbC9N/hHD6ErPL\n&quot; \
+&quot;v4dfxn+G07IwXNb9rfF73OX4YJYJkhD10FPe+3t+c4isUoh7SqbKSaZeqKeMWhG8\n&quot; \
+&quot;eoLrvozps6yWJQeXSpkqBy+0Hne/ig+1AnwblrjFuTosvNYSuetZfeLQBoZfXklq\n&quot; \
+&quot;tTleiDTsvHgMCJiEbKjNS7SgfQx5TfC4LcshytVsW33hoCmEofnTlEnLJGKRILzd\n&quot; \
+&quot;C9XZzPnqJworc5HGnRusyMvo4KD0L5CLTfuwNhv2GXqF4G3yYROIXJ/gkwpRl4pa\n&quot; \
+&quot;zq+r1feqCapgvdzZX99yqWATXgAByUr6P6TqBwMhAo6CygPCm48CAwEAAaOBnDCB\n&quot; \
+&quot;mTAOBgNVHQ8BAf8EBAMCAQYwDwYDVR0TAQH/BAUwAwEB/zAdBgNVHQ4EFgQUm+IH\n&quot; \
+&quot;V2ccHsBqBt5ZtJot39wZhi4wNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5n\n&quot; \
+&quot;bG9iYWxzaWduLm5ldC9yb290LXIyLmNybDAfBgNVHSMEGDAWgBSb4gdXZxwewGoG\n&quot; \
+&quot;3lm0mi3f3BmGLjANBgkqhkiG9w0BAQUFAAOCAQEAmYFThxxol4aR7OBKuEQLq4Gs\n&quot; \
+&quot;J0/WwbgcQ3izDJr86iw8bmEbTUsp9Z8FHSbBuOmDAGJFtqkIk7mpM0sYmsL4h4hO\n&quot; \
+&quot;291xNBrBVNpGP+DTKqttVCL1OmLNIG+6KYnX3ZHu01yiPqFbQfXf5WRDLenVOavS\n&quot; \
+&quot;ot+3i9DAgBkcRcAtjOj4LaR0VknFBbVPFd5uRHg5h6h+u/N5GJG79G+dwfCMNYxd\n&quot; \
+&quot;AfvDbbnvRG15RjF+Cv6pgsH/76tuIMRQyV+dTZsXjAzlAcmgQWpzU/qlULRuJQ/7\n&quot; \
+&quot;TBj0/VLZjmmx6BEP3ojY+x1J96relc8geMJgEtslQIxq/H5COEBkEveegeGTLg==\n&quot; \
+&quot;-----END CERTIFICATE-----\n&quot;;
+
+WiFiClientSecure client;
+
+
+void drawRectDemo() {
+      // Draw a pixel at given position
+    for (int i = 0; i &lt; 10; i++) 
+    {
+      display.setPixel(i, i);
+      display.setPixel(10 - i, i);
+    }
+
+    display.drawRect(12, 12, 20, 20);
+
+    // Fill the rectangle
+    display.fillRect(14, 14, 17, 17);
+
+    // Draw a line horizontally
+    display.drawHorizontalLine(0, 40, 20);
+
+    // Draw a line horizontally
+    display.drawVerticalLine(40, 0, 20);
+}
+
+void drawSpectrum(int sig, int len_sig)
+{
+    display.clear();
+    display.drawRect(0, 0, 128, 64);
+    display.setFont(ArialMT_Plain_10);
+    display.setTextAlignment(TEXT_ALIGN_CENTER);
+    display.drawString(64, 2, &quot;EYANTRA LAB&quot;);
+
+}
+void setup() {
+  Serial.begin(115200);
+  Wire.begin(5,4); // SDA, SCL
+  display.init();
+  display.setFont(ArialMT_Plain_10);
+  display.flipScreenVertically(); // Adjust to suit or remove
+  sampling_period_us = round(1000000 * (1.0 / SAMPLING_FREQUENCY));
+
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+  delay(500);
+    Serial.print(&quot;.&quot;);
+  }
+
+}
+
+
+
+void loop() {
+display.clear();
+  drawSpectrum(0,0);
+
+  display.display();
+
+  for (int i = 0; i &lt; SAMPLES; i++) 
+  {
+    newTime = micros()-oldTime;
+    oldTime = newTime;
+    vReal[i] = analogRead(A0); // A conversion takes about 1uS on an ESP32
+    vImag[i] = 0;
+    while (micros() &lt; (newTime + sampling_period_us)) { /* do nothing to wait */ }
+  }
+  //Selection of proper window technique to obtain optimum results
+  FFT.Windowing(vReal, SAMPLES, FFT_WIN_TYP_BLACKMAN_HARRIS, FFT_FORWARD);
+
+  //Computation of FFt algorithm to obtain Real and imaginary value 
+  FFT.Compute(vReal, vImag, SAMPLES, FFT_FORWARD);
+
+  FFT.ComplexToMagnitude(vReal, vImag, SAMPLES);  //Convert to mag
+  int j=0;
+  //$- But system for proof of concept ( max0-max3) 
+  int max0=0;
+  int max1=0;
+  int max2=0;
+  int max3=0;
+
+ //This can either be done by calibration or by formula from ( sampling,CHUNK,desired freq) 
+for (int i = 150  ; i &lt; 250; i++) // for loop to iterate via all bins
+
+{
+    if (vReal[i]&gt;150 &amp;&amp; i&gt;170 &amp;&amp;i &lt;180) // this is 16khz
+    { 
+
+      max1 = 1;
+    }
+
+
+
+    if (vReal[i]&gt;150 &amp;&amp; i&gt;185 &amp;&amp;i &lt;188) // this is 17khz
+    { 
+
+      max1 = 1;
+    }
+
+     if (vReal[i]&gt;50 &amp;&amp; i&gt;195 &amp;&amp;i &lt;205)  // this is 18khz
+    { 
+
+      max2 = 1;
+    }
+
+
+ if (vReal[i]&gt;100 &amp;&amp; i&gt;210 &amp;&amp;i &lt;230) // this is 19.1khz
+    { 
+
+      max3 = 1;
+    }
+
+
+
+}
+
+
+//To cehck for bits and print relevant user detalils ( in future it might be used with firebase 
+if( max0==0 &amp;&amp; max1==1 &amp;&amp; max2==0 &amp;&amp; max3==0 &amp;&amp; aravinda == 0 ) 
+{
+  Serial.println(&quot;ARAVINDA HARITHSA&quot;);
+  display.setFont(ArialMT_Plain_10);
+  display.setTextAlignment(TEXT_ALIGN_CENTER);
+  display.drawString(64, 22, &quot;ARAVINDA HARITHSA&quot;);
+  display.drawString(64, 32, &quot;AUTHENTICATED...&quot;);
+  display.display();
+  delay(1000);
+  display.clear();
+  HTTPClient http;
+  String url=&quot;https://script.google.com/macros/s/&quot;+GOOGLE_SCRIPT_ID+&quot;/exec?&quot;+ &quot;info1=Aravinda&amp;info2=Intern&amp;temp=temp&quot;;
+  http.begin(url, root_ca);
+  int httpCode = http.GET();
+  Serial.println(&quot;DONE_&quot;);  
+  http.end();
+
+  aravinda =1;
+}
+if(max0==0 &amp;&amp; max1==0 &amp;&amp; max2==1 &amp;&amp; max3==0 &amp;&amp; sourav == 0 ) 
+{
+
+Serial.println(&quot;SOURAV JENA&quot;);
+display.setFont(ArialMT_Plain_10);
+display.setTextAlignment(TEXT_ALIGN_CENTER);
+display.drawString(64, 22, &quot;SOURAV JENA&quot;);
+display.drawString(64, 32, &quot;AUTHENTICATED...&quot;);
+display.display();
+HTTPClient http;
+String url=&quot;https://script.google.com/macros/s/&quot;+GOOGLE_SCRIPT_ID+&quot;/exec?&quot;+ &quot;info1=Souvrav_Jena&amp;info2=Mentor&amp;temp=Permanent&quot;;
+http.begin(url, root_ca);
+int httpCode = http.GET();
+Serial.println(httpCode);
+http.end();
+delay(1000);
+sourav = 1;
+}
+
+
+</code></pre>
+
+<hr />
+<h2 id="_1"></h2>
+<pre><code class="c">
+</code></pre>
+
+<hr />
+<h2 id="_2"></h2></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

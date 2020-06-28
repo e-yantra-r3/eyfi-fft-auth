@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>FFT Authentication</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+        <script src="js/jquery-1.10.2.min.js" defer></script>
+        <script src="js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">FFT Authentication</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem active">
+                                <a href="." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="Software/" class="nav-link">Python Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="hardware/" class="nav-link">eYFi-Mega Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="references/" class="nav-link">References</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="Software/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="2"><a href="#abstract" class="nav-link">Abstract</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#how-ultrasonic-access-control-works" class="nav-link">How ‍Ultrasonic Access Control Works ?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            
+            <li class="nav-item" data-level="1"><a href="#sending-data-over-sound-how-and-why" class="nav-link">Sending Data Over Sound: How and Why?</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#how-does-it-work" class="nav-link">How Does it Work?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#why-sound" class="nav-link">Why Sound?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#the-benefits-of-sending-data-over-sound" class="nav-link">The Benefits of Sending Data over Sound</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#applications-of-using-sound" class="nav-link">Applications of using sound</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#challenges-ahead" class="nav-link">Challenges ahead</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#_1" class="nav-link"></a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<p><center><img src="./img/e-yantra.png" alt="eyantra"></center></p>
+<p><center><h1>FFT based Authentication System</h1></center></p>
+<p><br></p>
+<h2 id="abstract">Abstract</h2>
+<p>In this post-covid world everything is getting changed so we have to adopt to changes  . Biometric based authentication is outdated now and its need of the hour to develop novel systems which can be helpful at corporate offices,malls,labs,colleges where authenticating systems are used .An alternative to biometric fingerprint or keypad pushbuttons .Make accessing places most hygienic while maintaining security with personalized virtual keys on mobile phones. Safe shared no-contact access with ultrasonic keys that are as easy as a voice text message. here we will be making two different kinds of authentication system  We built  ultrasonic authentication system using  our eYFi- mega development board . We also interfaced the same with Google sheets to dynamically update the log in details and time stamps of unique users . We made use on very few components to complete this Authentication system. </p>
+<p>This system was tested for reliability,accuracy,dependability and lot of other factors. We have implemented both e-YFi mega based solution as well as Day to day Laptop based solution so we can retrofit this system anywhere within fraction of time . Cloud based support is given as well so that all the details can be monitored form anywhere</p>
+<h3 id="variants-of-our-design">Variants of our design</h3>
+<ul>
+<li>
+<p><strong>e-YFi  Mega</strong> based demo ( using Phone and ESp32-authenticating node)</p>
+</li>
+<li>
+<p><strong>Python based</strong> demo ( using Phone and Laptop-authenticating node) </p>
+</li>
+</ul>
+<hr />
+<p><strong>DEMO OF OUR PROJECT</strong></p>
+<p><iframe src="https://drive.google.com/file/d/1KNdH07N2bioZubS3AIqVtQqvVoCkz3R5/preview" width="640" height="480"></iframe></p>
+<h1 id="how-ultrasonic-access-control-works">How ‍Ultrasonic Access Control Works ?</h1>
+<p>Ultrasonic keys are coded “silent” audio messages that are sent from a mobile phone app to any electronic entrance keypad.  As a person holding a mobile phone nears the corresponding electronic entrance requiring the manual handling of a magnetic card, a biometric fingerprint or a push button keypad, the mobile plays an audio (ultrasonic) code that essentially is the virtual key.</p>
+<p><img alt="" src="img/athh.JPG" /></p>
+<p>Because the message is in the form of sound waves, which are naturally confined within a specific location, the message itself confirms that the phone is right there at the access point. That natural quality, together with our tokenized security technology, transforms the message into a personalized, controlled key. Unlike a password or pass coded number an ultrasonic key is always virtual and can never be copied, lost or stolen; it will simply be deleted and replaced.</p>
+<h1 id="sending-data-over-sound-how-and-why">Sending Data Over Sound: How and Why?</h1>
+<p>Demand grows for better IoT connectivity, with the need for the most basic of smart devices to be able to process real-time audio and perform intelligent DSP. One emerging solution is sending data-over-sound. Thus, data-over-sound software works well in a situation where there’s no network access, like rural or RF-restricted areas."</p>
+<p>From smartphones and tablets, to industrial equipment and smart-home appliances, hundreds of thousands of smart devices now require different forms of connectivity. The inevitable demand for better connectivity in the IoT era has increased the expectations for even the most basic smart devices to have the capability to process real-time audio and perform intelligent digital signal processing (DSP) on the network's entry point device.</p>
+<p>This has ultimately paved the way for a host of innovative market entrants, looking to both challenge and work in tandem with traditional solutions to provide quality data-transmission capabilities.</p>
+<p>Data-over-sound is one technology that’s now rapidly emerging as an exciting connectivity option for engineers and developers looking to achieve frictionless interactions between an ever-growing number of connected devices. But how exactly does data-over-sound work let us see about it now .</p>
+<h2 id="how-does-it-work">How Does it Work?</h2>
+<p>In short, data-over-sound enables the exchange of data between any devices with a pre-existing loudspeaker or microphone through sound waves. Delivered through machine-to-machine communications software, the technology works like an audio QR code, sending data over an acoustic channel to enhance end-user experiences and add value to existing hardware.</p>
+<p>In practice, data is encoded into an acoustic signal—a series of audible or inaudible pitches and tones to form a kind of sonic barcode. This is then played into a space and received and demodulated by a listening device. Data is subsequently decoded by the receiving device, or group of devices, and returns the original data. By using a range of audio frequencies, programmers can fit more information into less audio. To filter out noise, we carefully select frequencies and tune our software .</p>
+<h2 id="why-sound">Why Sound?</h2>
+<p><img alt="" src="img/audio.jpg" /></p>
+<ul>
+<li>
+<p>Ultrasonic connectivity solves the major limitations of existing RF-based communication standards . It outstrips RF connectivity by providing:</p>
+</li>
+<li>
+<p><strong>Low price</strong> and absolutely  No special hardware needed.</p>
+</li>
+<li><strong>High security</strong> – Verifies physical presence in compliance with SCA and enables session verification out of band, preventing man-in-the-middle attacks.</li>
+<li><strong>Total reliability</strong> – Always on, and works where WiFi, GSM, GPS, etc. cannot work or are unavailable.</li>
+<li><strong>Improved safety</strong> – Zero electromagnetic radiation.</li>
+</ul>
+<p>Data-over-sound has a multitude of complementary capabilities when compared to other connectivity technologies. The technology’s position as a pairing-free, one-to-many medium means it mitigates some of the setup and provisioning pain points often associated with traditional alternatives such as Bluetooth and Wi-Fi, presenting an appealing and versatile solution for frictionless data transmission. In general, compared to other technologies, data-over-sound is also able to be used in very wide application areas, taking advantage of existing hardware and without prior setup or configuration.</p>
+<p>Doing so, it enables the interconnection of millions of devices in a seamless, scalable, and cost-effective way to enhance end-user experience and drive value without increasing hardware costs. This ability to enhance existing infrastructure has inevitably captured the interest of companies interested in adding wireless connectivity functionality without adding to their bill of materials.</p>
+<h2 id="the-benefits-of-sending-data-over-sound">The Benefits of Sending Data over Sound</h2>
+<p>Embedding and extracting meaning from sound provides a quick, secure, and cost-effective solution that works completely offline. Data-over-sound is now emerging as an ideal medium for simple implementation and reliable connectivity.  Some of the most clear affordances of sound include:</p>
+<p><strong>Works offline</strong>: Sound works peer-to-peer or one-to-many, meaning no additional connections or network dependencies  are needed . Thus, data-over-sound software works well in a situation where there’s no network access, like rural or RF-restricted areas. Here every phone or device will have mic and speskers</p>
+<p><strong>Utilize existing hardware:</strong> The rise of microphones in IoT devices means that the hardware requirements are already met for billions of existing devices of all form factors. Combined with the arrival of zero-power microphones, data-over-sound provides an extremely low power. This will be Eliminating the need for additional hardware saves users both money and resources that can be invested back into the business.</p>
+<p><strong>Secure, private data transfer</strong>: Because acoustic connection doesn’t require an internet connection and supports industry-standard cryptography, you’ll have peace of mind that any data transferred will not be compromised. No audio, not even audio metadata, is ever stored or sent from a receiving device for processing.</p>
+<p><strong>Supports range of platforms:</strong> Data-over-sound is compatible with machines and devices of different platforms, form factors, and architectures that can process audio. From smartphones and tablets to toys and games, and even legacy and analog equipment, any device with a microphone and speaker can receive and decode data with the technology.</p>
+<p><strong>Seamless integration</strong>: Often implementing new software can be resource- and time-intensive. However, data-over-sound can be delivered through software-development kits (SDKs), which provides a fast and easy integration to a host of platform types, making the solution ideal for hobbyist developers and IoT projects.</p>
+<p><strong>Scalable</strong>: With data-over-sound, there’s no need to reengineer as your application grows. Whether the aim is to enable seamless P2P exchanges or send data from one-to-many, this method of data transfer is completely scalable. Use cases for data-over-sound are therefore wide ranging. They can include IoT devices sending and receiving commands, secure transactions, and un-spoofable receipts to merchants or buyers, as well as sending/receiving credentials (to provision Wi-Fi, for example).</p>
+<p><strong>Works in extreme environments</strong>: Through a range of frequencies, data-over-sound software is robust to background noise and has been proven to work seamlessly in the most extreme environments. From the streets of Delhi to nuclear power stations, acoustic network connectivity remains universally strong in the toughest environments. </p>
+<h2 id="applications-of-using-sound">Applications of using sound</h2>
+<p><strong>Ultrasonic Payments:</strong>
+ Facilitating secure pairing for mobile payments and contactless ATM interaction , already SBI yoni has mobile based withdrawal , which will  include mobile based passcode as well so if we just go there with our phone then we will get the cash without any physical interaction with the ATM machine
+.
+<strong>Ultrasonic Authentication:</strong> Providing a seamless and secure identification solution  a fully developed app that can be easily integrated and used by any third party application .this can replace the present biometric authentication system,rfid etc.</p>
+<h2 id="challenges-ahead">Challenges ahead</h2>
+<p>we do have some form of challenges and problems which can definitely be solved with relevant methods </p>
+<p><strong>Problem 1: Audio Hardware Limitations</strong>
+For our proposed solution, we need to broadcast the identifier (as ultrasonic sound) into an environment. We want this signal to be as strong as possible, but there are limits. An audio system can be overdriven which results in clipping. You’ve heard clipping if you’ve ever turned your speakers all the way up and the sound starts to get grainy.</p>
+<p>We see the same problem on the signal detection side. Microphones each have their own characteristic roll off, and will detect audible frequencies with greater ease than ultrasonic frequencies. And since the responsiveness characteristics of microphones vary depending on the frequencies to which they are exposed, we don’t get the same magnitude measure for two different frequencies even if they are played at equal intensity.</p>
+<p>Finally, most speakers and microphones are responsive to the frequency range of 20 Hz to 20 kHz which is more than enough to account for the range of human hearing. However, this means that our usable bandwidth of ultrasonic frequencies is small. The number of frequencies we can produce/detect at one time is limited.</p>
+<p><strong>Problem 2: Computation on  Eyifi-Mega Development board</strong></p>
+<p>The longer the amount of recorded audio, the greater precision we can achieve with frequency analysis. However, more recorded audio also requires greater processing time in the analysis phase, which is done on our development board. Many mobile devices simply lack the computational horsepower to simultaneously record audio, store it, and perform frequency analysis. </p>
+<p>We continue to tune the system so that we have a fast response time and high precision during the analysis phase. We’ve found the system works best when we use 1024 samples of audio at 44100 samples per-second for each loop in the receiver. A power of two is necessary for the Fast Fourier Transform to function properly. As smartphones get better, we anticipate this being less and less of a problem.</p>
+<p>novel idea where we use the sound spectrum to communicate between two devices and authenticate one's identity . We are proposing a  protocol for data connectivity  and authentication over sound waves. This will also serve us as  out-of-band M2M connectivity. We have encompassed a  protocol which  uniquely harnesses the power of Near ultrasound sound (17khz -20khz) to verify physical presence and authentication  unprecedented precision. It is now possible to deliver a digital-like experience in the physical world – opening new opportunities for IoT, DSPs .</p>
+<hr />
+<h2 id="_1"></h2>
+<hr />
+<blockquote></blockquote></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js" defer></script>
+        <script src="search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.1.2
+Build Date UTC : 2020-06-28 01:15:05.463398+00:00
+-->

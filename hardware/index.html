@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>eYFi-Mega Implementation - FFT Authentication</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">FFT Authentication</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../Software/" class="nav-link">Python Implementation</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">eYFi-Mega Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../references/" class="nav-link">References</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../Software/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../references/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#eyfi-mega-implementation" class="nav-link">eYFi-Mega Implementation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#our-model" class="nav-link">Our Model :</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#block-diagram-of-our-system" class="nav-link">Block diagram of our system</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#components-required" class="nav-link">Components required:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#circuit-schematic" class="nav-link">Circuit Schematic:</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#working-explained" class="nav-link">Working Explained</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#methodology-of-audio-communication" class="nav-link">Methodology of Audio communication</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#parallel-data-transfer" class="nav-link">( Parallel data transfer )</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="eyfi-mega-implementation">eYFi-Mega Implementation</h1>
+<h2 id="our-model">Our Model :</h2>
+<p><img alt="" src="../img/FFTintro.jpg" /></p>
+<p>This was the experimental setup which we constructed to show proof of concept of the Authentication system fir real world scenario. We successfully tested the accuracy,reliability and various other proposed features and came up with this model . </p>
+<h2 id="block-diagram-of-our-system">Block diagram of our system</h2>
+<p>Here a mobile phone will send the audio key and the mic will receive the signal and process the data , this has various application . Detailed working of the same will be explained below</p>
+<p><img alt="" src="../img/3.JPG" /></p>
+<h2 id="components-required">Components required:</h2>
+<ul>
+<li>
+<p><a href="http://products.e-yantra.org/eyfi-mega/">eYFi Mega Development Board</a></p>
+</li>
+<li>
+<p>Jumper wires </p>
+</li>
+<li>
+<p>MAX4466 High gain Microphone (20-20khz)</p>
+</li>
+<li>
+<p>OLED screen (0.96")</p>
+</li>
+<li>
+<p>Smartphone to send Audio key</p>
+</li>
+<li>
+<p>Internet Connectivity (wiFi)</p>
+</li>
+</ul>
+<hr />
+<h2 id="circuit-schematic">Circuit Schematic:</h2>
+<p><img alt="" src="../img/hardfft.png" /></p>
+<h2 id="working-explained">Working Explained</h2>
+<p>The whole system works only on sound , whenever a person will approach the authenticating node then he will play the static key ( in future versions we will make that dynamic with Cryptography techniques ) this mic connected to the eYFi Mega will receive the signal and process the incoming signal to get the meaningful data from it . Then once the key is matched with already stored key in the local database then display on the OLED screen the name of the individual and also by making use of https protocol send the details to google sheet based web app which will be configured with our system . Then the login credentials such as Name,Role ,Time will be automatically updated . </p>
+<h2 id="methodology-of-audio-communication">Methodology of Audio communication</h2>
+<h2 id="parallel-data-transfer">( Parallel data transfer )</h2>
+<p>Our fundamental approach is making use of available spectral domain from 17khz to 20khz concurrently together to send the bit information . We will be for this proof of concept utilizing only 4 bits and that can be stretched as long as 25-30 bits easily. Hence we can authenticate in a fraction of a second just by comin in region of interest of the node . without any waiting time or lag  Here is the brief overview of the working of our system in a block diagram </p>
+<p><img alt="" src="../img/1.JPG" /></p>
+<p>Here the below image shows the potential system which can send 25-30 bits of data at once ,so making our system extremely faster and reliable . With improving of FFT algorithms,Window functions,Mic quality and lot of other factors we can substantially increase the coverage range and also the resolution of Bits .</p>
+<p><img alt="" src="../img/2.JPG" /></p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

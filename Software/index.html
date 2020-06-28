@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Python Implementation - FFT Authentication</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+
+        <script src="../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../js/bootstrap.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">FFT Authentication</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem">
+                                <a href=".." class="nav-link">Home</a>
+                            </li>
+                            <li class="navitem active">
+                                <a href="./" class="nav-link">Python Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../hardware/" class="nav-link">eYFi-Mega Implementation</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="../references/" class="nav-link">References</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../hardware/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-secondary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#python-implementation" class="nav-link">Python Implementation</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#software-used" class="nav-link">Software used</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#how-does-it-work" class="nav-link">How does it work?</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="python-implementation">Python Implementation</h1>
+<p>This is about python implementation of the authentication system which we discussed where we will be authenticating using the laptop based program laptop will be continuously listening from mic. Here, We have implemented multi-threading as well to increase the sampling rate and also provide accurate results. We have used mobile phone with laptop .</p>
+<p><img alt="" src="../img/FFT.JPG" /></p>
+<p>This is screenshot of the demo system- where the audio key  is being played from phone and recieved by laptop . Now lets look into more details and components .</p>
+<hr />
+<h2 id="software-used">Software used</h2>
+<ul>
+<li>Python 3.7 </li>
+<li>Pyaudio module </li>
+</ul>
+<hr />
+<h2 id="how-does-it-work">How does it work?</h2>
+<p>We will be sending useful information in inaudible spectrum range of 17-20khz and each user will be given a unique frequency to communicate with the authenticating node or device . He will send his encrypted key in serial format . We will be using Phase shift keying technique to send the data from mobile device to the authenticating node or laptop . Once the information received matches with the user credentials then the system will authenticate them and logs in their time of arrival and other details automatically .</p>
+<h3 id="our-approach">Our approach</h3>
+<p>Our main logic is it will be consistently listening and once it receives sound then It takes the input data or input audio and puts into bin, bin is a container where the raw audio samples will be stored . once bin is full then will  be processed for fast Fourier transform and after applying for fast Fourier transform we will be obtaining the spectrum .We will use frequency versus time plot to get the input data serial information which will be sent with PSK (phase shift keying) encoded signals .Then we will apply lot of algorithms to extract the input data , . We should provide you with the Information here in this we are using a Serial based communication where we will be sending the details in one particular frequency between user and the computer and then once the contents are received in that content are decoded using the psk module where the incoming data will be decoded. And also we will be providing our data with extra zeros so that any error or any ambient noise or Distortion might be possibly removed</p>
+<h3 id="decoding-methodology-serial-communication">Decoding methodology ( Serial communication )</h3>
+<p><img alt="" src="../img/1f.JPG" /></p>
+<p>This is example of input signal which will be heard by the laptop's mic. This particular signal will be decoded  by using various steps mentioned below to obtain the useful information out of these </p>
+<p>The FFT algorithm will be applied to get the spectrum of the input signal, here in python we will be using FFT libraries included under numpy module which will provide us with the below spectrum which is plotted using matplotlib </p>
+<p><strong>This is the plot of input signal's FFT plotted</strong> </p>
+<p><img alt="" src="../img/1a.JPG" /></p>
+<p>We require only one frequency information so we will be rejecting every other values and concentrating on the value which is being sent from the phone. The below plot will show us the FFT which is plotted for one particular region of the whole spectrum and everything else will be rejected </p>
+<p><img alt="" src="../img/1b.JPG" /></p>
+<p>Once we get the frequency to which we are listening to then we will plot the frequency  vs  time we will obtain the below results as shown in the plot </p>
+<p><img alt="" src="../img/1c.JPG" /></p>
+<p>Once we get this plot then we will look for our desired frequency range where the signal was sent and suitable filters will be applied to remove and normalize the input serial information into more generalized processable format which can be co-related with bit values which are being sent as shown below </p>
+<p><img alt="" src="../img/1d.JPG" /></p>
+<p>From this again all the phase changes will be determined as we will be using PSK modulation technique to decode that data we need to know the points where the phase will change </p>
+<p><img alt="" src="../img/1e.JPG" /></p>
+<p>once we obtain the decoded signal this will be compared with the PSK dictionary for getting the values or characters which were being sent from the phone . As this being mission critical task we have to use multithreading where each thread will be doing it;s own allotted task and be communicating between each other ,even if we miss 0.1 seconds we would loos lot of vital information . Thus by this system we will successfully establish communication system thereby making way for secure authentication using sound signals </p>
+<p>We tested this on our laptop and we were able to successfully authenticate with audio based key. Range was also good. Pre-Generated Ultrasonic music based keys were played and those were decoded with almost 100% accuracy by our system , Here is the clip of the obtained results .</p>
+<p><img alt="" src="../img/auth.JPG" /></p>
+<p>Here in this pic 2 of the users where authenticated  using the ultrasonic audio key which was played by phone . as this was proof of concept we just tested on to static key generation , in future versions we will work on dynamic key which will be exchanged based on encoding and decoding key based on time factor . </p>
+<h3 id="future-scope">Future scope</h3>
+<p>This particular concepts are You can implement this as a two-factor authentication where Google users you send the passcode that has a dependency on your cellular area network, but this doesn't have any net dependency. We successfully tested this particular model and results are obtained were highly accurate and We have also shown popper demo videos.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js" defer></script>
+        <script src="../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
